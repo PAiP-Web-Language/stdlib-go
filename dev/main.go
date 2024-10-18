@@ -1,5 +1,10 @@
 package dev
 
+import (
+	"fmt"
+	"strings"
+)
+
 // EnsureTypesMatch checks if provided argumet is of type T
 // This function is NOOP so it should be pretty fast
 // Idea for that function is to use it in init function of modules to have your LSP suggest
