@@ -147,9 +147,9 @@ func (n Option[T]) UnwrapOrErr(f func(Option[T])) T {
 func (n Option[T]) UnwrapAsResultOrErr(f func(Option[T])) Result[T] {
 	if !n.Some {
 		f(n)
-		return MakeErrorResult[T](errors.UnwrapError{})
+		return Err[T](errors.UnwrapError{})
 	}
-	return MakeOkResult[T](n.ValueOrZero())
+	return Ok[T](n.ValueOrZero())
 }
 
 // Unwrap value and error separately (Result -> Go normal returns)
@@ -250,13 +250,33 @@ func (n Option[T]) Clone() Option[T] {
 
 // Inspect value of this object
 func (n Option[T]) Inspect(f func(Option[T])) Option[T] {
-	f(n)
+	if n.IsSome() {
+		f(n)
+	}
 	return n
 }
 
 // Inspect value of this objects reference
 func (n *Option[T]) InspectRef(f func(*Option[T])) *Option[T] {
-	f(n)
+	if n.IsSome() {
+		f(n)
+	}
+	return n
+}
+
+// Inspect value of this object
+func (n Option[T]) InspectNone(f func(Option[T])) Option[T] {
+	if n.IsNone() {
+		f(n)
+	}
+	return n
+}
+
+// Inspect value of this objects reference
+func (n *Option[T]) InspectNoneRef(f func(*Option[T])) *Option[T] {
+	if n.IsNone() {
+		f(n)
+	}
 	return n
 }
 
@@ -270,17 +290,17 @@ func (n Option[T]) SetNone() {
 // Convert to Result with specified error as Err() on None()
 func (n Option[T]) OkOr(err error) Result[T] {
 	if n.IsNone() {
-		return MakeErrorResult[T](err)
+		return Err[T](err)
 	}
-	return MakeOkResult[T](n.ValueOrZero())
+	return Ok[T](n.ValueOrZero())
 }
 
 // Convert to Result using specified function's result as Err() on None()
 func (n Option[T]) OkOrElse(f func() error) Result[T] {
 	if n.IsNone() {
-		return MakeErrorResult[T](f())
+		return Err[T](f())
 	}
-	return MakeOkResult[T](n.ValueOrZero())
+	return Ok[T](n.ValueOrZero())
 }
 
 // And return Some(other) if both Option are Some()

@@ -171,9 +171,9 @@ func (n Nullable[T]) UnwrapOrErr(f func(Nullable[T])) T {
 func (n Nullable[T]) UnwrapAsResultOrErr(f func(Nullable[T])) Result[T] {
 	if !n.Valid {
 		f(n)
-		return MakeErrorResult[T](errors.UnwrapError{})
+		return Err[T](errors.UnwrapError{})
 	}
-	return MakeOkResult[T](n.ValueOrZero())
+	return Ok[T](n.ValueOrZero())
 }
 
 // Unwrap value and error separately (Result -> Go normal returns)
@@ -295,16 +295,16 @@ func (n Nullable[T]) SetNull() {
 // Convert to Result with specified error as Err() on Null()
 func (n Nullable[T]) OkOr(err error) Result[T] {
 	if n.IsNull() {
-		return MakeErrorResult[T](err)
+		return Err[T](err)
 	}
-	return MakeOkResult[T](n.ValueOrZero())
+	return Ok[T](n.ValueOrZero())
 }
 
 // Convert to Result using specified function's result as Err() on Null()
 func (n Nullable[T]) OkOrElse(f func() error) Result[T] {
 	if n.IsNull() {
-		return MakeErrorResult[T](f())
+		return Err[T](f())
 	}
-	return MakeOkResult[T](n.ValueOrZero())
+	return Ok[T](n.ValueOrZero())
 }
 
