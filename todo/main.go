@@ -8,6 +8,9 @@ import (
 // TodoStruct is an empty struct meant to be used as placeholder for temporary no value return
 type TodoStruct struct {}
 
+// TodoInterface is an empty interface
+type TodoInterface interface {}
+
 // TodoNotUsed is a function that takes in any number of arguments
 // This function is NOOP so it should be pretty fast
 // Idea for that function is to use it to ignore errors for imported and not used / declared and not used
