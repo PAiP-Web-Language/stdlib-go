@@ -252,6 +252,22 @@ func (n Nullable[T]) ToValue() Nullable[T] {
 	return n
 }
 
+// Cast to Option
+func (n Nullable[T]) ToOption() Option[any] {
+	if n.IsNull() {
+		return None[any]()
+	}
+	return Some[any](n.ValueOrZero())
+}
+
+// Cast to Option
+func (n Nullable[T]) ToOptionT() Option[T] {
+	if n.IsNull() {
+		return None[T]()
+	}
+	return Some[T](n.ValueOrZero())
+}
+
 // Clone this object
 func (n Nullable[T]) Clone() Nullable[T] {
 	return Nullable[T]{Data: n.Data, Valid: n.Valid}
