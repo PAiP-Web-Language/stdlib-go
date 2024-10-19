@@ -286,3 +286,13 @@ func (r Result[T]) ToObservableT() Observable[Result[T]] {
 func (r Result[T]) Clone() Result[T] {
 	return Result[T]{Data: r.Data, Err: r.Err}
 }
+
+// Cast to ThreadSafeObject
+func (r Result[T]) ToThreadSafeObject() ThreadSafeObject[Result[any]] {
+	return MakeThreadSafeObject(r.ToResult())
+}
+
+// Cast to ThreadSafeObject
+func (r Result[T]) ToThreadSafeObjectT() ThreadSafeObject[Result[T]] {
+	return MakeThreadSafeObject(r)
+}

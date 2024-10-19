@@ -378,3 +378,13 @@ func (o Option[T]) XorT(other Option[T]) Option[T] {
 	}
 	return None[T]()
 }
+
+// Cast to ThreadSafeObject
+func (o Option[T]) ToThreadSafeObject() ThreadSafeObject[Option[any]] {
+	return MakeThreadSafeObject(o.ToOption())
+}
+
+// Cast to ThreadSafeObject
+func (o Option[T]) ToThreadSafeObjectT() ThreadSafeObject[Option[T]] {
+	return MakeThreadSafeObject(o)
+}

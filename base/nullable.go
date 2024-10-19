@@ -323,3 +323,13 @@ func (n Nullable[T]) OkOrElse(f func() error) Result[T] {
 	return Ok[T](n.ValueOrZero())
 }
 
+// Cast to ThreadSafeObject
+func (n Nullable[T]) ToThreadSafeObject() ThreadSafeObject[Nullable[any]] {
+	return MakeThreadSafeObject(n.ToNullable())
+}
+
+// Cast to ThreadSafeObject
+func (n Nullable[T]) ToThreadSafeObjectT() ThreadSafeObject[Nullable[T]] {
+	return MakeThreadSafeObject(n)
+}
+
