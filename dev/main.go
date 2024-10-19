@@ -15,6 +15,12 @@ func EnsureTypesMatch[T any](a T) {
 // VoidStruct is an empty struct
 type VoidStruct struct {}
 
+// VoidInterface is an empty interface
+type VoidInterface interface {}
+
+// Self is empty interface that is used to note that it function is using or returning object which is part of
+type Self interface {}
+
 // FunctionsUsedInDebugging is a function that takes in any number of functions
 // That are used in debugging
 // This function is NOOP so it should be pretty fast
