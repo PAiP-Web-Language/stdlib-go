@@ -11,8 +11,6 @@ type ThreadSafeObject[T any] interface {}
 type Arc[T any] interface {}
 type Rc[T any] interface {}
 type Mut[T any] interface {}
-type Observable[T any] interface {}
-type Once[T any] interface {}
 // -1 = < | 0 = = | 1 = >
 // (a <=> b) < 0 if a < b,
 // (a <=> b) > 0 if a > b,
@@ -47,7 +45,7 @@ type TemplateType interface {
 	ToRc() Rc[any]
 	ToMut() Mut[any]
 	ToObservable() Observable[any]
-	ToOnce() Once[any]
+	ToOnceable() Onceable[any]
 	ToArray() []any
 	ToSlice() []any
 	ToMap() map[any]any
@@ -176,7 +174,7 @@ type TypedTemplateType[Self any, T any, T2 any, TC comparable] interface {
 	ToRcT() Rc[T]
 	ToMutT() Mut[T]
 	ToObservableT() Observable[T]
-	ToOnceT() Once[T]
+	ToOnceableT() Onceable[T]
 	ToArrayT() []T
 	ToSliceT() []T
 	ToMapT() map[TC]T
