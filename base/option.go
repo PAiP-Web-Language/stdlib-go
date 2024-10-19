@@ -27,14 +27,14 @@ func SomeFromPointer[T any](value *T) Option[T] {
 	return Some(*value)
 }
 
-// Null Create a Option that is NULL with type T
+// None Create a Option that is NULL with type T
 func None[T any]() Option[T] {
 	return Option[T]{}
 }
 
-// OptionZeroValue Get default zero value of type T
-func SomeDefaultValue[T any]() T {
-	return Null[T]().ValueOrZero()
+// SomeDefaultValue Get default zero value of type T
+func SomeDefaultValue[T any]() Option[T] {
+	return Some(Null[T]().ValueOrZero())
 }
 
 // ValueOrZero Get Value, or default zero value if it is NULL
@@ -260,14 +260,14 @@ func (n *Option[T]) InspectRef(f func(*Option[T])) *Option[T] {
 	return n
 }
 
-// Set value of this nullable to NULL
-func (n Option[T]) SetNull() {
+// Set value of this option to None
+func (n Option[T]) SetNone() {
 	var ref T
 	n.Some = false
 	n.Data = ref
 }
 
-// Convert to Result with specified error as Err() on Null()
+// Convert to Result with specified error as Err() on None()
 func (n Option[T]) OkOr(err error) Result[T] {
 	if n.IsNone() {
 		return MakeErrorResult[T](err)
@@ -275,7 +275,7 @@ func (n Option[T]) OkOr(err error) Result[T] {
 	return MakeOkResult[T](n.ValueOrZero())
 }
 
-// Convert to Result using specified function's result as Err() on Null()
+// Convert to Result using specified function's result as Err() on None()
 func (n Option[T]) OkOrElse(f func() error) Result[T] {
 	if n.IsNone() {
 		return MakeErrorResult[T](f())
