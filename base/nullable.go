@@ -252,6 +252,11 @@ func (n Nullable[T]) ToValue() Nullable[T] {
 	return n
 }
 
+// Cast to Any Nullable
+func (n Nullable[T]) ToNullable() Nullable[any] {
+	return Nullable[any]{Data: n.Data, Valid: n.Valid}
+}
+
 // Cast to Option
 func (n Nullable[T]) ToOption() Option[any] {
 	if n.IsNull() {
@@ -266,6 +271,16 @@ func (n Nullable[T]) ToOptionT() Option[T] {
 		return None[T]()
 	}
 	return Some[T](n.ValueOrZero())
+}
+
+// Cast to Observable
+func (n Nullable[T]) ToObservable() Observable[Nullable[any]] {
+	return MakeObservable(n.ToNullable())
+}
+
+// Cast to Observable
+func (n Nullable[T]) ToObservableT() Observable[Nullable[T]] {
+	return MakeObservable(n)
 }
 
 // Clone this object

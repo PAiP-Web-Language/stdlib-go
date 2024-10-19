@@ -204,75 +204,85 @@ func (r Result[T]) IsErr() bool {
 }
 
 // Inspect value of this object
-func (n Result[T]) Inspect(f func(Result[T])) Result[T] {
-	if n.IsOk() {
-		f(n)
+func (r Result[T]) Inspect(f func(Result[T])) Result[T] {
+	if r.IsOk() {
+		f(r)
 	}
-	return n
+	return r
 }
 
 // Inspect value of this objects reference
-func (n *Result[T]) InspectRef(f func(*Result[T])) *Result[T] {
-	if n.IsOk() {
-		f(n)
+func (r *Result[T]) InspectRef(f func(*Result[T])) *Result[T] {
+	if r.IsOk() {
+		f(r)
 	}
-	return n
+	return r
 }
 
 // Inspect value of this object
-func (n Result[T]) InspectErr(f func(Result[T])) Result[T] {
-	if n.IsErr() {
-		f(n)
+func (r Result[T]) InspectErr(f func(Result[T])) Result[T] {
+	if r.IsErr() {
+		f(r)
 	}
-	return n
+	return r
 }
 
 // Inspect value of this objects reference
-func (n *Result[T]) InspectErrRef(f func(*Result[T])) *Result[T] {
-	if n.IsErr() {
-		f(n)
+func (r *Result[T]) InspectErrRef(f func(*Result[T])) *Result[T] {
+	if r.IsErr() {
+		f(r)
 	}
-	return n
+	return r
 }
 
 // Cast to Result
-func (n Result[T]) ToResult() Result[any] {
-	return Result[any]{Data: n.Data, Err: n.Err}
+func (r Result[T]) ToResult() Result[any] {
+	return Result[any]{Data: r.Data, Err: r.Err}
 }
 
 // Cast to Option
-func (n Result[T]) ToOption() Option[any] {
-	if n.IsError() {
+func (r Result[T]) ToOption() Option[any] {
+	if r.IsError() {
 		return None[any]()
 	}
-	return Some[any](n.Data)
+	return Some[any](r.Data)
 }
 
 // Cast to Option
-func (n Result[T]) ToOptionT() Option[T] {
-	if n.IsError() {
+func (r Result[T]) ToOptionT() Option[T] {
+	if r.IsError() {
 		return None[T]()
 	}
-	return Some[T](n.Data)
+	return Some[T](r.Data)
 }
 
 // Cast to Nullable
-func (n Result[T]) ToNullable() Nullable[any] {
-	if n.IsError() {
+func (r Result[T]) ToNullable() Nullable[any] {
+	if r.IsError() {
 		return Null[any]()
 	}
-	return NullableValue[any](n.Data)
+	return NullableValue[any](r.Data)
 }
 
 // Cast to Nullable
-func (n Result[T]) ToNullableT() Nullable[T] {
-	if n.IsError() {
+func (r Result[T]) ToNullableT() Nullable[T] {
+	if r.IsError() {
 		return Null[T]()
 	}
-	return NullableValue[T](n.Data)
+	return NullableValue[T](r.Data)
+}
+
+// Cast to Observable
+func (r Result[T]) ToObservable() Observable[Result[any]] {
+	return MakeObservable(r.ToResult())
+}
+
+// Cast to Observable
+func (r Result[T]) ToObservableT() Observable[Result[T]] {
+	return MakeObservable(r)
 }
 
 // Clone this object
-func (n Result[T]) Clone() Result[T] {
-	return Result[T]{Data: n.Data, Err: n.Err}
+func (r Result[T]) Clone() Result[T] {
+	return Result[T]{Data: r.Data, Err: r.Err}
 }

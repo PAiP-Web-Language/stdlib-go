@@ -38,275 +38,285 @@ func SomeDefaultValue[T any]() Option[T] {
 }
 
 // ValueOrZero Get Value, or default zero value if it is NULL
-func (n Option[T]) ValueOrZero() T {
-	if !n.Some {
+func (o Option[T]) ValueOrZero() T {
+	if !o.Some {
 		var ref T
 		return ref
 	}
-	return n.Data
+	return o.Data
 }
 
 // IsDefault Check if value is default value
-func (n Option[T]) IsDefault() bool {
-	if !n.Some {
+func (o Option[T]) IsDefault() bool {
+	if !o.Some {
 		return true
 	}
 	var ref T
-	return any(ref) == any(n.Data)
+	return any(ref) == any(o.Data)
 }
 
 // Equal Check if this Option is equal to another Option
-func (n Option[T]) Equal(other Option[T]) bool {
-	switch any(n.Data).(type) {
+func (o Option[T]) Equal(other Option[T]) bool {
+	switch any(o.Data).(type) {
 	case time.Time:
-		nValue := any(n.Data).(time.Time)
+		nValue := any(o.Data).(time.Time)
 		otherValue := any(other.Data).(time.Time)
-		return n.Some == other.Some && (!n.Some || nValue.Equal(otherValue))
+		return o.Some == other.Some && (!o.Some || nValue.Equal(otherValue))
 	}
-	return n.ExactEqual(other)
+	return o.ExactEqual(other)
 }
 
 // ExactEqual Check if this Option is exact equal to another Option, never using intern Equal method to check equality
-func (n Option[T]) ExactEqual(other Option[T]) bool {
-	return n.Some == other.Some && (!n.Some || any(n.Data) == any(other.Data))
+func (o Option[T]) ExactEqual(other Option[T]) bool {
+	return o.Some == other.Some && (!o.Some || any(o.Data) == any(other.Data))
 }
 
 // String Convert value to string
-func (n Option[T]) String() string {
-	return fmt.Sprintf("%s", any(n.Data))
+func (o Option[T]) String() string {
+	return fmt.Sprintf("%s", any(o.Data))
 }
 
 // Get Go String
-func (n Option[T]) GoString() string {
+func (o Option[T]) GoString() string {
 	var ref T
 	return fmt.Sprintf(
 		"Option[%T]{Data:%#v,Valid:%#v}",
 		ref,
-		n.Data,
-		n.Some,
+		o.Data,
+		o.Some,
 	)
 }
 
 // Get underlying value
-func (n Option[T]) Value() (driver.Value, error) {
-	if !n.Some {
+func (o Option[T]) Value() (driver.Value, error) {
+	if !o.Some {
 		return nil, nil
 	}
-	return n.Data, nil
+	return o.Data, nil
 }
 
 // Run function fn when value is not NULL
-func (n Option[T]) AndThen(fn func(T) any) any {
-	if !n.Some {
+func (o Option[T]) AndThen(fn func(T) any) any {
+	if !o.Some {
 		return nil
 	}
-	return fn(n.Data)
+	return fn(o.Data)
 }
 
 // Get underlying value or panic if error
-func (n Option[T]) Unwrap() T {
-	if !n.Some {
+func (o Option[T]) Unwrap() T {
+	if !o.Some {
 		panic(errors.UnwrapError{})
 	}
-	return n.Data
+	return o.Data
 }
 
 // Get underlying value or panic if error
-func (n Option[T]) UnwrapOrDefault() T {
-	return n.ValueOrZero()
+func (o Option[T]) UnwrapOrDefault() T {
+	return o.ValueOrZero()
 }
 
 // Get underlying error or panic if correct value
-func (n Option[T]) UnwrapErr() error {
-	if n.Some {
+func (o Option[T]) UnwrapErr() error {
+	if o.Some {
 		panic(errors.UnwrapError{})
 	}
 	return errors.OptionError{}
 }
 
 // Get underlying value or return default value if error is found
-func (n Option[T]) UnwrapOr(defaultVal T) T {
-	if !n.Some {
+func (o Option[T]) UnwrapOr(defaultVal T) T {
+	if !o.Some {
 		return defaultVal
 	}
-	return n.Data
+	return o.Data
 }
 
 // Unwrap but if error occurs run specified function f instead of panic
 // Return result of underlying value (having err if it's found)
-func (n Option[T]) UnwrapOrErr(f func(Option[T])) T {
-	if !n.Some {
-		f(n)
+func (o Option[T]) UnwrapOrErr(f func(Option[T])) T {
+	if !o.Some {
+		f(o)
 	}
-	return n.ValueOrZero()
+	return o.ValueOrZero()
 }
 
 // Unwraps as result type for if error checks and run specified function f
 // instead of panic
 // Return result of underlying value (having err if it's found)
-func (n Option[T]) UnwrapAsResultOrErr(f func(Option[T])) Result[T] {
-	if !n.Some {
-		f(n)
+func (o Option[T]) UnwrapAsResultOrErr(f func(Option[T])) Result[T] {
+	if !o.Some {
+		f(o)
 		return Err[T](errors.UnwrapError{})
 	}
-	return Ok[T](n.ValueOrZero())
+	return Ok[T](o.ValueOrZero())
 }
 
 // Unwrap value and error separately (Result -> Go normal returns)
-func (n Option[T]) UnwrapWithErr() (T, error) {
+func (o Option[T]) UnwrapWithErr() (T, error) {
 	var err error = nil
-	if !n.Some {
+	if !o.Some {
 		err = errors.OptionError{}
 	}
-	return n.Data, err
+	return o.Data, err
 }
 
 // Expect correct value if error is found panic with specified message
-func (n Option[T]) Expect(err any) {
-	if !n.Some {
+func (o Option[T]) Expect(err any) {
+	if !o.Some {
 		panic(err)
 	}
 }
 
 // Expect error value if error is not found panic with specified message
-func (n Option[T]) ExpectErr(err any) {
-	if n.Some {
+func (o Option[T]) ExpectErr(err any) {
+	if o.Some {
 		panic(err)
 	}
 }
 
 // Check if Object has error
-func (n Option[T]) IsError() bool {
-	return !n.Some
+func (o Option[T]) IsError() bool {
+	return !o.Some
 }
 
 // Get Error if Object has error or nil if not
-func (n Option[T]) GetError() error {
-	if n.Some {
+func (o Option[T]) GetError() error {
+	if o.Some {
 		return nil
 	}
 	return errors.OptionError{}
 }
 
 // Get value or zero
-func (n Option[T]) GetT() T {
-    return n.ValueOrZero()
+func (o Option[T]) GetT() T {
+    return o.ValueOrZero()
 }
 
 // Get value or zero
-func (n Option[T]) GetValueT() T {
-    return n.ValueOrZero()
+func (o Option[T]) GetValueT() T {
+    return o.ValueOrZero()
 }
 
 // Get value or zero as any
-func (n Option[T]) Get() any {
-    return n.ValueOrZero()
+func (o Option[T]) Get() any {
+    return o.ValueOrZero()
 }
 
 // Get value or zero as any
-func (n Option[T]) GetValue() any {
-    return n.ValueOrZero()
+func (o Option[T]) GetValue() any {
+    return o.ValueOrZero()
 }
 
 // Check if value is None
-func (n Option[T]) IsNone() bool {
-    return !n.Some
+func (o Option[T]) IsNone() bool {
+    return !o.Some
 }
 
 // Check if value is Some
-func (n Option[T]) IsSome() bool {
-	return n.Some
+func (o Option[T]) IsSome() bool {
+	return o.Some
 }
 
 // Cast to Pointer
-func (n *Option[T]) ToPointer() *Option[T] {
-	return n
+func (o *Option[T]) ToPointer() *Option[T] {
+	return o
 }
 
 // Cast to Value
-func (n Option[T]) ToValue() Option[T] {
-	return n
+func (o Option[T]) ToValue() Option[T] {
+	return o
 }
 
 // Cast to Any Option
-func (n Option[T]) ToOption() Option[any] {
-	return Option[any]{Data: n.Data, Some: n.Some}
+func (o Option[T]) ToOption() Option[any] {
+	return Option[any]{Data: o.Data, Some: o.Some}
 }
 
 // Cast to Nullable
-func (n Option[T]) ToNullable() Nullable[any] {
-	return NullableValue[any](n.ValueOrZero())
+func (o Option[T]) ToNullable() Nullable[any] {
+	return NullableValue[any](o.ValueOrZero())
 }
 
 // Cast to Nullable
-func (n Option[T]) ToNullableT() Nullable[T] {
-	return NullableValue[T](n.ValueOrZero())
+func (o Option[T]) ToNullableT() Nullable[T] {
+	return NullableValue[T](o.ValueOrZero())
+}
+
+// Cast to Observable
+func (o Option[T]) ToObservable() Observable[Option[any]] {
+	return MakeObservable(o.ToOption())
+}
+
+// Cast to Observable
+func (o Option[T]) ToObservableT() Observable[Option[T]] {
+	return MakeObservable(o)
 }
 
 // Clone this object
-func (n Option[T]) Clone() Option[T] {
-	return Option[T]{Data: n.Data, Some: n.Some}
+func (o Option[T]) Clone() Option[T] {
+	return Option[T]{Data: o.Data, Some: o.Some}
 }
 
 // Inspect value of this object
-func (n Option[T]) Inspect(f func(Option[T])) Option[T] {
-	if n.IsSome() {
-		f(n)
+func (o Option[T]) Inspect(f func(Option[T])) Option[T] {
+	if o.IsSome() {
+		f(o)
 	}
-	return n
+	return o
 }
 
 // Inspect value of this objects reference
-func (n *Option[T]) InspectRef(f func(*Option[T])) *Option[T] {
-	if n.IsSome() {
-		f(n)
+func (o *Option[T]) InspectRef(f func(*Option[T])) *Option[T] {
+	if o.IsSome() {
+		f(o)
 	}
-	return n
+	return o
 }
 
 // Inspect value of this object
-func (n Option[T]) InspectNone(f func(Option[T])) Option[T] {
-	if n.IsNone() {
-		f(n)
+func (o Option[T]) InspectNone(f func(Option[T])) Option[T] {
+	if o.IsNone() {
+		f(o)
 	}
-	return n
+	return o
 }
 
 // Inspect value of this objects reference
-func (n *Option[T]) InspectNoneRef(f func(*Option[T])) *Option[T] {
-	if n.IsNone() {
-		f(n)
+func (o *Option[T]) InspectNoneRef(f func(*Option[T])) *Option[T] {
+	if o.IsNone() {
+		f(o)
 	}
-	return n
+	return o
 }
 
 // Set value of this option to None
-func (n Option[T]) SetNone() {
+func (o Option[T]) SetNone() {
 	var ref T
-	n.Some = false
-	n.Data = ref
+	o.Some = false
+	o.Data = ref
 }
 
 // Convert to Result with specified error as Err() on None()
-func (n Option[T]) OkOr(err error) Result[T] {
-	if n.IsNone() {
+func (o Option[T]) OkOr(err error) Result[T] {
+	if o.IsNone() {
 		return Err[T](err)
 	}
-	return Ok[T](n.ValueOrZero())
+	return Ok[T](o.ValueOrZero())
 }
 
 // Convert to Result using specified function's result as Err() on None()
-func (n Option[T]) OkOrElse(f func() error) Result[T] {
-	if n.IsNone() {
+func (o Option[T]) OkOrElse(f func() error) Result[T] {
+	if o.IsNone() {
 		return Err[T](f())
 	}
-	return Ok[T](n.ValueOrZero())
+	return Ok[T](o.ValueOrZero())
 }
 
 // And return Some(other) if both Option are Some()
 // Or return None() if one of them is None()
-func (n Option[T]) And(other Option[any]) Option[any] {
-	if n.IsNone() {
+func (o Option[T]) And(other Option[any]) Option[any] {
+	if o.IsNone() {
 		return None[any]()
 	}
 	if other.IsNone() {
@@ -317,8 +327,8 @@ func (n Option[T]) And(other Option[any]) Option[any] {
 
 // And return Some(other) if both Option are Some()
 // Or return None() if one of them is None()
-func (n Option[T]) AndT(other Option[T]) Option[T] {
-	if n.IsNone() {
+func (o Option[T]) AndT(other Option[T]) Option[T] {
+	if o.IsNone() {
 		return None[T]()
 	}
 	if other.IsNone() {
@@ -329,29 +339,29 @@ func (n Option[T]) AndT(other Option[T]) Option[T] {
 
 // Or return Some(self) if self is Some
 // Otherwise return None() or Some(other) depending on state of other
-func (n Option[T]) Or(other Option[any]) Option[any] {
-	if n.IsNone() {
+func (o Option[T]) Or(other Option[any]) Option[any] {
+	if o.IsNone() {
 		return other.Clone()
 	}
-	return Some[any](n.ValueOrZero())
+	return Some[any](o.ValueOrZero())
 }
 
 // Or return Some(self) if self is Some
 // Otherwise return None() or Some(other) depending on state of other
-func (n Option[T]) OrT(other Option[T]) Option[T] {
-	if n.IsNone() {
+func (o Option[T]) OrT(other Option[T]) Option[T] {
+	if o.IsNone() {
 		return other.Clone()
 	}
-	return Some[T](n.ValueOrZero())
+	return Some[T](o.ValueOrZero())
 }
 
 // Xor return Some() if exactly one of Option is Some
 // Otherwise return None()
-func (n Option[T]) Xor(other Option[any]) Option[any] {
-	if n.IsSome() && other.IsNone() {
-		return Some[any](n.ValueOrZero())
+func (o Option[T]) Xor(other Option[any]) Option[any] {
+	if o.IsSome() && other.IsNone() {
+		return Some[any](o.ValueOrZero())
 	}
-	if n.IsNone() && other.IsSome() {
+	if o.IsNone() && other.IsSome() {
 		return Some[any](other.ValueOrZero())
 	}
 	return None[any]()
@@ -359,11 +369,11 @@ func (n Option[T]) Xor(other Option[any]) Option[any] {
 
 // Xor return Some() if exactly one of Option is Some
 // Otherwise return None()
-func (n Option[T]) XorT(other Option[T]) Option[T] {
-	if n.IsSome() && other.IsNone() {
-		return Some[T](n.ValueOrZero())
+func (o Option[T]) XorT(other Option[T]) Option[T] {
+	if o.IsSome() && other.IsNone() {
+		return Some[T](o.ValueOrZero())
 	}
-	if n.IsNone() && other.IsSome() {
+	if o.IsNone() && other.IsSome() {
 		return Some[T](other.ValueOrZero())
 	}
 	return None[T]()
