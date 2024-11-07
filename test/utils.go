@@ -31,6 +31,8 @@ func TestUtilErrorFormat(t testing.TB, skip int, msg string, args ...any) {
 	dev.Unreachable("Test Logic Error")
 }
 
+// Wrap testing.TB into type supporting more advanced testing features
+// Type returned implements testing.TB interface and can be used as this interface
 func WrapTB(t testing.TB) *internal.T {
     t.Helper()
 	return &internal.T{TB: t}
