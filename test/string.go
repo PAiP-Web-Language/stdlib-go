@@ -28,9 +28,8 @@ func NotContain(t testing.TB, s string, substr string, args ...any) {
 // MatchesRegexp checks if string matches regexp
 func MatchesRegexp(t testing.TB, regex base.LUI2[string, *regexp.Regexp], value string, args ...any) {
 	t.Helper()
-	switch regex.(type) {
+	switch r := regex.(type) {
 	case string:
-		r := regex.(string)
 		reg, err := regexp.Compile(r)
 		if err != nil {
 			ErrorFormat(t, 1, fmt.Sprintf("failed to compile regexp %v", r), args...)
@@ -40,10 +39,9 @@ func MatchesRegexp(t testing.TB, regex base.LUI2[string, *regexp.Regexp], value 
 			ErrorFormat(t, 1, fmt.Sprintf("value %v does not match regexp %v", value, r), args...)
 		}
 	case *regexp.Regexp:
-		reg := regex.(*regexp.Regexp)
-		matched := reg.MatchString(value)
+		matched := r.MatchString(value)
 		if !matched {
-			ErrorFormat(t, 1, fmt.Sprintf("value %v does not match regexp %v", value, reg), args...)
+			ErrorFormat(t, 1, fmt.Sprintf("value %v does not match regexp %v", value, r), args...)
 		}
 	}
 }
@@ -51,9 +49,8 @@ func MatchesRegexp(t testing.TB, regex base.LUI2[string, *regexp.Regexp], value 
 // NotMatchesRegexp checks if string does not match regexp
 func NotMatchesRegexp(t testing.TB, regex base.LUI2[string, *regexp.Regexp], value string, args ...any) {
 	t.Helper()
-	switch regex.(type) {
+	switch r := regex.(type) {
 	case string:
-		r := regex.(string)
 		reg, err := regexp.Compile(r)
 		if err != nil {
 			ErrorFormat(t, 1, fmt.Sprintf("failed to compile regexp %v", r), args...)
@@ -63,10 +60,9 @@ func NotMatchesRegexp(t testing.TB, regex base.LUI2[string, *regexp.Regexp], val
 			ErrorFormat(t, 1, fmt.Sprintf("value %v does match regexp %v", value, r), args...)
 		}
 	case *regexp.Regexp:
-		reg := regex.(*regexp.Regexp)
-		matched := reg.MatchString(value)
+		matched := r.MatchString(value)
 		if matched {
-			ErrorFormat(t, 1, fmt.Sprintf("value %v does match regexp %v", value, reg), args...)
+			ErrorFormat(t, 1, fmt.Sprintf("value %v does match regexp %v", value, r), args...)
 		}
 	}
 }
