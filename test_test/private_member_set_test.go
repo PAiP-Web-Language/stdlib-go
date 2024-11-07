@@ -19,6 +19,7 @@ func TestSetPrivateMember1(_t *testing.T) {
 	defer t.Defer()
 	test.LogIfFailed(t, "SetPrivateMember should pass on correct value")
 	t1 := &TestSetPrivateMemberStruct{}
+	test.Assert(t, t1.GetA() == 0, "SetPrivateMember should pass on correct value")
 	test.SetPrivateMember(t, t1, "a", 1)
 	test.Assert(t, t1.GetA() == 1, "SetPrivateMember should pass on correct value")
 }
