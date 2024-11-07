@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/PAiP-Web-Language/stdlib-go/dev"
+	"github.com/PAiP-Web-Language/stdlib-go/test/internal"
 )
 
 // ErrorFormat is a function that will fail test with specified message
@@ -28,4 +29,9 @@ func TestUtilErrorFormat(t testing.TB, skip int, msg string, args ...any) {
 	t.Fatalf("%s:%d Test Error: %s %v", file, line, msg, args)
 
 	dev.Unreachable("Test Logic Error")
+}
+
+func WrapTB(t testing.TB) *internal.T {
+    t.Helper()
+	return &internal.T{TB: t}
 }
