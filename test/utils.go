@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/PAiP-Web-Language/stdlib-go/dev"
-	"github.com/PAiP-Web-Language/stdlib-go/test/internal"
 )
 
 // ErrorFormat is a function that will fail test with specified message
@@ -41,28 +40,28 @@ func TestUtilErrorFormat(t testing.TB, skip int, msg string, args ...any) {
 
 // Wrap testing.TB into type supporting more advanced testing features
 // Type returned implements testing.TB interface and can be used as this interface
-func WrapTB(t testing.TB) *internal.TB {
+func WrapTB(t testing.TB) *TB {
     t.Helper()
-	return &internal.TB{TB: t}
+	return &TB{TB: t}
 }
 
 // Wrap testing.T into type supporting more advanced testing features
 // Type returned implements testing.T interface and can be used as this interface
-func WrapT(t *testing.T) *internal.T {
+func WrapT(t *testing.T) *T {
     t.Helper()
-	return &internal.T{T: t}
+	return &T{T: t}
 }
 
 // Wrap testing.B into type supporting more advanced testing features
 // Type returned implements testing.B interface and can be used as this interface
-func WrapB(t *testing.B) *internal.B {
+func WrapB(t *testing.B) *B {
     t.Helper()
-	return &internal.B{B: t}
+	return &B{B: t}
 }
 
 // Wrap testing.F into type supporting more advanced testing features
 // Type returned implements testing.F interface and can be used as this interface
-func WrapF(t *testing.F) *internal.F {
+func WrapF(t *testing.F) *F {
     t.Helper()
-	return &internal.F{F: t}
+	return &F{F: t}
 }

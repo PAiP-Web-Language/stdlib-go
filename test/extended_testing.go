@@ -11,26 +11,30 @@
 // license that can be found in the https://github.com/golang/go/blob/go1.23.2/LICENSE file.
 
 
-package internal
+package test
 
 import (
+	"errors"
 	"testing"
 )
 
-// This wrapper is arround testing.B addding some additional functionality
-type B struct {
-	*testing.B
+var Err = errors.New("Test error")
+
+// TB is the interface common to testing.T, testing.B, and testing.F.
+// This wrapper is arround testing.TB addding some additional functionality
+type TB struct {
+	testing.TB
 	ExpectedFailure bool
 	failed bool
 }
 
 // Fail marks the function as having failed but continues execution.
-func (t *B) Fail() {
+func (t *TB) Fail() {
 	t.Helper()
 	if t.ExpectedFailure {
 		t.failed = true
 	} else {
-		t.B.Fail()
+		t.TB.Fail()
 	}
 }
 
@@ -44,72 +48,72 @@ func (t *B) Fail() {
 // those other goroutines.
 //
 // If test is marked as Failure is expected then FailNow will panic with error that is meant to be catched by T.Defer()
-func (t *B) FailNow() {
+func (t *TB) FailNow() {
 	t.Helper()
 	if t.ExpectedFailure {
 		panic(Err)
 	} else {
-		t.B.FailNow()
+		t.TB.FailNow()
 	}
 }
 
 // Fatal is equivalent to Log followed by FailNow.
-func (t *B) Fatal(args ...any) {
+func (t *TB) Fatal(args ...any) {
 	t.Helper()
 	if t.ExpectedFailure {
-		t.B.Log(args...)
+		t.TB.Log(args...)
 		t.FailNow()
 	} else {
-		t.B.Fatal(args...)
+		t.TB.Fatal(args...)
 	}
 }
 
 // Fatalf is equivalent to Logf followed by FailNow.
-func (t *B) Fatalf(format string, args ...any) {
+func (t *TB) Fatalf(format string, args ...any) {
 	t.Helper()
 	if t.ExpectedFailure {
-		t.B.Logf(format, args...)
+		t.TB.Logf(format, args...)
 		t.FailNow()
 	} else {
-		t.B.Fatalf(format, args...)
+		t.TB.Fatalf(format, args...)
 	}
 }
 
 // Error is equivalent to Log followed by Fail.
-func (t *B) Error(args ...any) {
+func (t *TB) Error(args ...any) {
     t.Helper()
     if t.ExpectedFailure {
-        t.B.Log(args...)
+        t.TB.Log(args...)
         t.Fail()
     } else {
-        t.B.Error(args...)
+        t.TB.Error(args...)
     }
 }
 
 // Errorf is equivalent to Logf followed by Fail.
-func (t *B) Errorf(format string, args ...any) {
+func (t *TB) Errorf(format string, args ...any) {
 	t.Helper()
 	if t.ExpectedFailure {
-		t.B.Logf(format, args...)
+		t.TB.Logf(format, args...)
 		t.Fail()
 	} else {
-		t.B.Errorf(format, args...)
+		t.TB.Errorf(format, args...)
 	}
 }
 
 // Failed reports whether the function has failed.
 //
 // This function takes into account whether test is expected to fail
-func (t *B) Failed() bool {
+func (t *TB) Failed() bool {
 	if !t.ExpectedFailure {
-		return t.B.Failed() || t.failed
+		return t.TB.Failed() || t.failed
 	}
-	return t.B.Failed() || !t.failed
+	return t.TB.Failed() || !t.failed
 }
 
 // Defer logic for handling test failure
 // This function takes into account whether test is expected to fail
-func (t *B) Defer() {
+func (t *TB) Defer() {
 	t.Helper()
 	if r := recover(); r != nil {
 		if t.ExpectedFailure {
@@ -120,23 +124,11 @@ func (t *B) Defer() {
 	}
 	if t.ExpectedFailure {
 		if !t.failed {
-			t.B.FailNow()
+			t.TB.FailNow()
 		}
 	} else {
 		if t.failed {
-			t.B.FailNow()
+			t.TB.FailNow()
 		}
 	}
-}
-
-// Run benchmarks f as a subbenchmark with the given name. It reports
-// whether there were any failures.
-//
-// A subbenchmark is like any other benchmark. A benchmark that calls Run at
-// least once will not be measured itself and will be called once with N=1.
-func (t *B) RunTB(name string, f func(t testing.TB)) bool {
-	t.Helper()
-	return t.B.Run(name, func(t *testing.B) {
-		f(t)
-	})
 }

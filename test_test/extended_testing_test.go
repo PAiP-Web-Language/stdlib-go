@@ -1,4 +1,4 @@
-package internal_test
+package test_test
 
 // Uncomment when needed (vim: 5GvGgcc)
 
@@ -6,8 +6,7 @@ import (
 	"testing"
 
 	"github.com/PAiP-Web-Language/stdlib-go/dev"
-	"github.com/PAiP-Web-Language/stdlib-go/test"
-	. "github.com/PAiP-Web-Language/stdlib-go/test/internal"
+	. "github.com/PAiP-Web-Language/stdlib-go/test"
 )
 
 func TestInterfaces(t *testing.T) {
@@ -49,10 +48,10 @@ func TestInterfaces(t *testing.T) {
 	// _= tbi2
 
 
-	var itp *T = test.WrapT(tp)
-	var ibp *B = test.WrapB(bp)
-	var ifp *F = test.WrapF(fp)
-	var itb *TB = test.WrapTB(tb)
+	var itp *T = WrapT(tp)
+	var ibp *B = WrapB(bp)
+	var ifp *F = WrapF(fp)
+	var itb *TB = WrapTB(tb)
 
 
 	var iti TI = itp

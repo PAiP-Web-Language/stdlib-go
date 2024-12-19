@@ -11,7 +11,7 @@
 // license that can be found in the https://github.com/golang/go/blob/go1.23.2/LICENSE file.
 
 
-package internal
+package test
 
 import (
 	"testing"
