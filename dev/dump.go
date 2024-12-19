@@ -146,3 +146,18 @@ func SingleStringDump(vs any) string {
 	).Fprint(buf, vs)
 	return buf.String()
 }
+
+// DebugHelper is a function that takes in any number of arguments and prints them to the console with unlimited depth
+// This function is meant to be used for debugging purposes
+// This function is printing to stderr
+// This function is intended as helper function
+// This function is used for all Debug methods
+// Depth is techically unlimited, because it is set to math.MaxInt
+func DebugHelper(additionalSkip int, vs ...any) {
+	dump.NewWithOptions(
+		func(opts *dump.Options) {
+			opts.CallerSkip = DevDumpSkip + additionalSkip
+			opts.MaxDepth = math.MaxInt
+		},
+	).Fprint(os.Stderr, vs...)
+}
