@@ -115,3 +115,24 @@ func Unreachable(args ...string) {
 	}
 }
 
+// MetaPure is a function that marks function as pure
+// This function is intended to be used for noting that function it is in is meant to be pure
+// Pure meaning that it does not have any side effects, no state
+func MetaPure() {}
+
+// MetaImpure is a function that marks function as impure
+// This function is intended to be used for noting that function it is in is not pure
+// Impure meaning that it has side effects or has state
+func MetaImpure() {}
+
+// MetaDependsOnGlobalState is a function that marks function as depending on global state
+// This function is intended to be used for noting that function it is in depends on global state (not local to function or structure)
+// You can provide argument to specify on what it depends and why
+func MetaDependsOnGlobalState(why ...any) {}
+
+// MetaPanics is a function that marks function as panicking
+// This function is intended to be used for noting that function can panic
+// You can provide argument to specify on what it panics with and why
+// In one case you can fully not use that function (if you using MetaX functions) and it is assert panics
+// Meaning that you only assert in the function (and this is only way it can panic) you can omit MetaPanics
+func MetaPanics(why ...any) {}
