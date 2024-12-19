@@ -118,12 +118,12 @@ func Unreachable(args ...string) {
 // MetaPure is a function that marks function as pure
 // This function is intended to be used for noting that function it is in is meant to be pure
 // Pure meaning that it does not have any side effects, no state
-func MetaPure() {}
+func MetaPure(why ...any) {}
 
 // MetaImpure is a function that marks function as impure
 // This function is intended to be used for noting that function it is in is not pure
 // Impure meaning that it has side effects or has state
-func MetaImpure() {}
+func MetaImpure(why ...any) {}
 
 // MetaDependsOnGlobalState is a function that marks function as depending on global state
 // This function is intended to be used for noting that function it is in depends on global state (not local to function or structure)
@@ -136,3 +136,14 @@ func MetaDependsOnGlobalState(why ...any) {}
 // In one case you can fully not use that function (if you using MetaX functions) and it is assert panics
 // Meaning that you only assert in the function (and this is only way it can panic) you can omit MetaPanics
 func MetaPanics(why ...any) {}
+
+// MetaMutable is a function that marks specific function or something else as mutable
+// This function is intended to be used for noting that function or something else is mutable
+func MetaMutable(why ...any) {}
+
+// MetaGenericMethod is a function that marks specific function as generic method
+// This function is intended to be used for noting that function is generic method
+// You can provide argument specifying on which object this method should be on or description or other metadata
+// This function is workaround Go not having generic methods like:
+// func (t *TO) M[T any](x T) {}
+func MetaGenericMethod(why ...any) {}
