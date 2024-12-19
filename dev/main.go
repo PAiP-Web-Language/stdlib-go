@@ -143,7 +143,8 @@ func MetaMutable(why ...any) {}
 
 // MetaGenericMethod is a function that marks specific function as generic method
 // This function is intended to be used for noting that function is generic method
-// You can provide argument specifying on which object this method should be on or description or other metadata
+// Type parameter T is used to specify type of object this method is on
+//
 // This function is workaround Go not having generic methods like:
 // func (t *TO) M[T any](x T) {}
-func MetaGenericMethod(why ...any) {}
+func MetaGenericMethod[T any](why ...any) {}
