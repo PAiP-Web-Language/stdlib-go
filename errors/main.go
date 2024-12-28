@@ -11,3 +11,11 @@ type NullError struct {
 func (NullError) Error() string {
 	return "NullError"
 }
+
+// FunctionalError is a error that is used to note that error happened based on input or other assertions
+type FunctionalError struct {
+}
+
+func (FunctionalError) Error() string {
+	return "FunctionalError"
+}
