@@ -1,3 +1,4 @@
 package base
 
-type Str = string
+type Str string
+
