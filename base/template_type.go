@@ -8,7 +8,6 @@ import (
 // TODO: Types
 type Arc[T any] interface {}
 type Rc[T any] interface {}
-type Mut[T any] interface {}
 
 type TemplateType interface {
 	// Array Like
