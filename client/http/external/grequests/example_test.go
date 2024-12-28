@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/levigross/grequests"
+	"github.com/PAiP-Web-Language/stdlib-go/client/http/external/grequests"
 )
 
 func Example_basicGet() {
