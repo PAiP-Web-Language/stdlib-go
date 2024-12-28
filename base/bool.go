@@ -184,6 +184,13 @@ func (b Bool) GoString() string {
 	return falseString
 }
 
+func (b Bool) ToStr() Str {
+	if b {
+		return trueString
+	}
+	return falseString
+}
+
 // TemplateType
 
 func (b Bool) Get() Bool {
@@ -444,4 +451,12 @@ func (b Bool) ToComplex128() Complex128 {
 		return 1
 	}
 	return 0
+}
+
+func (b *Bool) ToPointer() *Bool {
+	return b
+}
+
+func (b Bool) ToValue() Bool {
+	return b
 }
