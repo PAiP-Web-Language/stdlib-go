@@ -22,6 +22,12 @@ const (
 // Boolean type that is used to represent true and false values
 type Bool bool
 
+// Interface
+
+type ToBoolInterface interface {
+	ToBool() Bool
+}
+
 // Operators
 
 // Or operation
@@ -176,6 +182,109 @@ func (b Bool) GoString() string {
 		return trueString
 	}
 	return falseString
+}
+
+// TemplateType
+
+func (b Bool) Get() Bool {
+	return b
+}
+
+func (b Bool) GetValue() Bool {
+	return b
+}
+
+func (b Bool) GetAny() any {
+	return b
+}
+
+func (b Bool) GetValueAny() any {
+	return b
+}
+
+func (b *Bool) Set(b2 bool) {
+	*b = Bool(b2)
+}
+
+func (b *Bool) SetValue(b2 bool) {
+	*b = Bool(b2)
+}
+
+func (b *Bool) SetAny(b2 any) {
+	switch b2v := b2.(type) {
+	case Bool:
+		*b = b2v
+	case bool:
+		*b = Bool(b2v)
+	case Str:
+		b.FromStringInplace(string(b2v))
+	case string:
+		b.FromStringInplace(b2v)
+	case I8:
+		*b = Bool(b2v != 0)
+	case I16:
+		*b = Bool(b2v != 0)
+	case I32:
+		*b = Bool(b2v != 0)
+	case I64:
+		*b = Bool(b2v != 0)
+	case U8:
+		*b = Bool(b2v != 0)
+	case U16:
+		*b = Bool(b2v != 0)
+	case U32:
+		*b = Bool(b2v != 0)
+	case U64:
+		*b = Bool(b2v != 0)
+	case Usize:
+		*b = Bool(b2v != 0)
+	case F32:
+		*b = Bool(b2v != 0)
+	case F64:
+		*b = Bool(b2v != 0)
+	case Complex64:
+		*b = Bool(b2v != 0)
+	case Complex128:
+		*b = Bool(b2v != 0)
+	case int:
+		*b = Bool(b2v != 0)
+	case int8:
+		*b = Bool(b2v != 0)
+	case int16:
+		*b = Bool(b2v != 0)
+	case int32:
+		*b = Bool(b2v != 0)
+	case int64:
+		*b = Bool(b2v != 0)
+	case uint:
+		*b = Bool(b2v != 0)
+	case uint8:
+		*b = Bool(b2v != 0)
+	case uint16:
+		*b = Bool(b2v != 0)
+	case uint32:
+		*b = Bool(b2v != 0)
+	case uint64:
+		*b = Bool(b2v != 0)
+	case uintptr:
+		*b = Bool(b2v != 0)
+	case float32:
+		*b = Bool(b2v != 0)
+	case float64:
+		*b = Bool(b2v != 0)
+	case complex64:
+		*b = Bool(b2v != 0)
+	case complex128:
+		*b = Bool(b2v != 0)
+	case ToBoolInterface:
+		*b = b2v.ToBool()
+	default:
+		panic("Invalid Type")
+	}
+}
+
+func (b *Bool) SetValueAny(b2 bool) {
+	b.SetAny(b2)
 }
 
 // Casts
