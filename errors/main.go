@@ -1,5 +1,7 @@
 package errors
 
+import "fmt"
+
 type Error = error
 type Exception = error
 
@@ -18,4 +20,16 @@ type FunctionalError struct {
 
 func (FunctionalError) Error() string {
 	return "FunctionalError"
+}
+
+// AssertionError is a error that is used to note that assertion failed
+type AssertionError struct {
+	CustomMessage string
+}
+
+func (ae AssertionError) Error() string {
+	if ae.CustomMessage != "" {
+		return fmt.Sprintf("AssertionError: %v", ae.CustomMessage)
+	}
+	return "AssertionError"
 }
