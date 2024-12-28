@@ -1,6 +1,10 @@
 package base
 
-import "github.com/PAiP-Web-Language/stdlib-go/dev"
+import (
+	"strings"
+
+	"github.com/PAiP-Web-Language/stdlib-go/dev"
+)
 
 // Constants
 
@@ -112,6 +116,40 @@ func (b Bool) FromBool(b2 bool) Bool {
 	return Bool(b2)
 }
 
+// FromString creates new Bool struct from specifed string
+// If string is invalid value it will assume that it is false
+func (b Bool) FromString(s string) Bool {
+	sl := strings.ToLower(s)
+	if sl == trueString {
+		return True
+	}
+	return False
+}
+
+// FromStringInplace changes value of this Bool struct to specified string
+// If string is invalid value it will assume that it is false
+func (b *Bool) FromStringInplace(s string) {
+	sl := strings.ToLower(s)
+	if sl == trueString {
+		*b = True
+	}
+	*b = False
+}
+
+// FromStringToOption creates new Option[Bool] struct from specifed string
+// If string is valid value it will return Some[Bool] with corresponding Bool value
+// If string is not valid value it will return None[Bool]
+func (b Bool) FromStringToOption(s string) Option[Bool] {
+	sl := strings.ToLower(s)
+	if sl == trueString {
+		return Some[Bool](True)
+	}
+	if sl == falseString {
+		return Some[Bool](False)
+	}
+	return None[Bool]()
+}
+
 // ToBool converts Bool struct to go boolean
 func (b Bool) ToBool() bool {
 	return bool(b)
@@ -127,6 +165,13 @@ func (b Bool) ToString() string {
 }
 
 func (b Bool) String() string {
+	if b {
+		return trueString
+	}
+	return falseString
+}
+
+func (b Bool) GoString() string {
 	if b {
 		return trueString
 	}
