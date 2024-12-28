@@ -1,7 +1,7 @@
 package http
 
 import (
-	"github.com/levigross/grequests"
+	"github.com/PAiP-Web-Language/stdlib-go/client/http/external/grequests"
 	. "github.com/PAiP-Web-Language/stdlib-go/base"
 )
 
