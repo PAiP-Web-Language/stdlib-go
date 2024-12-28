@@ -9,11 +9,6 @@ import (
 type Arc[T any] interface {}
 type Rc[T any] interface {}
 type Mut[T any] interface {}
-// -1 = < | 0 = = | 1 = >
-// (a <=> b) < 0 if a < b,
-// (a <=> b) > 0 if a > b,
-// (a <=> b) == 0 if a and b are equal/equivalent.
-type ThreeWayComparable uint8
 
 type TemplateType interface {
 	// Array Like
