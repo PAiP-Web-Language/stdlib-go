@@ -287,6 +287,72 @@ func (b *Bool) SetValueAny(b2 bool) {
 	b.SetAny(b2)
 }
 
+func (b Bool) Copy() Bool {
+	return Bool(b)
+}
+
+func (b Bool) Clone() Bool {
+	return Bool(b)
+}
+
+// Compare
+
+// -1 = < | 0 = = | 1 = >
+// (a <=> b) < 0 if a < b,
+// (a <=> b) > 0 if a > b,
+// (a <=> b) == 0 if a and b are equal/equivalent.
+func (b Bool) Compare(b2 Bool) ThreeWayComparable {
+	if b == b2 {
+		return ThreeWayComparable__Equal
+	}
+	if b {
+		return ThreeWayComparable__GreaterThan
+	}
+	return ThreeWayComparable__LessThan
+}
+
+func (b Bool) Equal(b2 Bool) bool {
+	return b == b2
+}
+
+func (b Bool) NotEqual(b2 Bool) bool {
+	return b != b2
+}
+
+func (b Bool) LessThan(b2 Bool) bool {
+	if b == b2 {
+		return false
+	}
+	if b {
+		return true
+	}
+	return false
+}
+
+func (b Bool) LessThanOrEqual(b2 Bool) bool {
+	if b == b2 {
+		return true
+	}
+	return !bool(b)
+}
+
+func (b Bool) GreaterThan(b2 Bool) bool {
+	if b == b2 {
+		return false
+	}
+	if !b {
+		return true
+	}
+	return false
+}
+
+func (b Bool) GreaterThanOrEqual(b2 Bool) bool {
+	if b == b2 {
+		return true
+	}
+	return bool(b)
+}
+
 // Casts
 
 func (b Bool) ToI8() I8 {
